@@ -1,7 +1,7 @@
 import java.util.*;
 int scl;
 int w;
-int items = 100;
+int items = 600;
 static int pauseMS = 20;
 int[] arr;
 boolean sort = false;
@@ -9,7 +9,8 @@ SortingAlgo sortingAlgorithm;
 int[] matchArr;
 
 void setup(){
-  size(500,500);
+  size(1000,800);
+  if(items > width/2) {items = width/2;println("Limit hit, defaults to " + width/2);}
   reset();
   noLoop();
 }
@@ -25,6 +26,9 @@ void reset(){
   
   matchArr = toIntArray(sizeList);
   arr = shuffleArray(sizeList);
+  redIndex = -1;
+  blueIndex = -1;
+  greenIndex = -1;
 }
 
 void keyPressed(){
@@ -55,6 +59,9 @@ void startAlgo(SortingAlgo a){
   redraw();
 }
 
+int redIndex = -1;
+int blueIndex = -1;
+int greenIndex = -1;
 boolean startScreen = true;
 void draw(){
   background(0);
@@ -68,6 +75,10 @@ void draw(){
     }
   
     for(int i = 0; i < arr.length-1 ; i++){
+      if(i == redIndex) fill(255,0,0);
+      else if (i == blueIndex) fill(0,0,255);
+      else if (i == greenIndex) fill(0,255,0);
+      else fill(255);
       rect(i*w,height-(arr[i]*scl), w,(arr[i]*scl));
     }
   }
@@ -75,6 +86,7 @@ void draw(){
 
 public void sort(){
   sort = sortingAlgorithm.sort(arr);
+  return;
 }
 
 public void step(){
@@ -133,6 +145,7 @@ class BubbleSort implements SortingAlgo{
       sorted = true;
       for (int i = 0; i < a.length - 1; i++) {
         if (a[i] > a[i+1]) {
+            redIndex = i;
             temp = a[i];
             a[i] = a[i+1];
             a[i+1] = temp;
@@ -153,6 +166,7 @@ class InsertionSort implements SortingAlgo{
         int j = i - 1;
         while(j >= 0 && current < a[j]) {
             a[j+1] = a[j];
+            redIndex = j;
             j--; 
             step();
         }
@@ -171,15 +185,17 @@ class SelectionSort implements SortingAlgo{
       for (int i = 0; i < a.length; i++) {
         int min = a[i];
         int minId = i;
+        
         for (int j = i+1; j < a.length; j++) {
             if (a[j] < min) {
                 min = a[j];
                 minId = j;                
-            }
-            
+            } 
         }        
+        
         // swapping
         int temp = a[i];
+        redIndex = min;
         a[i] = min;
         a[minId] = temp;
         step();
@@ -320,10 +336,13 @@ class QuickSort implements SortingAlgo{
             int temp = array[counter];
             array[counter] = array[i];
             array[i] = temp;
+            redIndex = i;
             counter++;  
             step();
         }
     }
+    greenIndex = counter;
+    blueIndex = pivot;
     int temp = array[pivot];
     array[pivot] = array[counter];
     array[counter] = temp;
