@@ -28,6 +28,7 @@ void reset(){
   redIndex = -1;
   blueIndex = -1;
   greenIndex = -1;
+  sorting = false;
 }
 
 void keyPressed(){
@@ -264,6 +265,7 @@ class MergeSort implements SortingAlgo{
             rightIndex++;
         }
     }
+    step();
    }
 }
 
