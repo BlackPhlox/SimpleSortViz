@@ -28,6 +28,7 @@ void reset(){
   redIndex = -1;
   blueIndex = -1;
   greenIndex = -1;
+  sorting = false;
 }
 
 void keyPressed(){
@@ -264,6 +265,7 @@ class MergeSort implements SortingAlgo{
             rightIndex++;
         }
     }
+    step();
    }
 }
 
@@ -283,8 +285,6 @@ class HeapSort implements SortingAlgo{
     // we're going from the first non-leaf to the root
     for (int i = length / 2-1; i >= 0; i--)
         heapify(array, length, i);
-    
-    step(500);
     
     for (int i = length-1; i >= 0; i--) {
         int temp = array[0];
@@ -315,13 +315,14 @@ class HeapSort implements SortingAlgo{
         int temp = array[i];
         array[i] = array[largest];
         array[largest] = temp;
-        heapify(array, length, largest);        
+        heapify(array, length, largest);
+        step();
     }
   }
 }
 
 class QuickSort implements SortingAlgo{
-  boolean sort(int[] a) {
+    boolean sort(int[] a) {
     quickSort(a,0,a.length-1);
     step();
     return true;
