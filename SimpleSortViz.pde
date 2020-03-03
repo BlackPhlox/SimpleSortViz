@@ -284,8 +284,6 @@ class HeapSort implements SortingAlgo{
     for (int i = length / 2-1; i >= 0; i--)
         heapify(array, length, i);
     
-    step(500);
-    
     for (int i = length-1; i >= 0; i--) {
         int temp = array[0];
         array[0] = array[i];
@@ -315,7 +313,8 @@ class HeapSort implements SortingAlgo{
         int temp = array[i];
         array[i] = array[largest];
         array[largest] = temp;
-        heapify(array, length, largest);        
+        heapify(array, length, largest);
+        step();
     }
   }
 }
@@ -327,10 +326,22 @@ class QuickSort implements SortingAlgo{
     return true;
   }
   
+  int median2(int a, int b, int c) {
+    return (a > b) ^ (a > c) ? a : (a > b) ^ (b > c) ? c : b;
+  }
+  
   int partition(int[] array, int begin, int end) {
-    int pivot = end;
+    int elementCount= Math.floorDiv((end-begin), 2);
+    int first = array[begin];
+    int middle = array[begin+elementCount];
+    int last = array[end];
+    int pivot = median2(first, middle, last); 
+    pivot = first;
+    
+    blueIndex = pivot;
 
     int counter = begin;
+    
     for (int i = begin; i < end; i++) {        
         if (array[i] < array[pivot]) {
             int temp = array[counter];
@@ -341,12 +352,24 @@ class QuickSort implements SortingAlgo{
             step();
         }
     }
-    greenIndex = counter;
-    blueIndex = pivot;
-    int temp = array[pivot];
-    array[pivot] = array[counter];
-    array[counter] = temp;
-
+    
+    /*if(pivot == first){
+      int temp = array[pivot];
+      array[pivot] = array[begin];
+      array[begin] = temp;
+    }
+    else if (pivot==middle) {
+      int temp = array[pivot];
+      array[pivot] = array[begin+elementCount];
+      array[begin+elementCount] = temp;
+    }
+    else {*/
+      int temp = array[pivot];
+      array[pivot] = array[end];
+      array[end] = temp;
+    //}
+    
+    
     return counter;
   }
 
