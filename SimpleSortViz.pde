@@ -1,8 +1,7 @@
 import java.util.*;
-int scl;
-int w;
+int scl,w;
 int items = 600;
-static int pauseMS = 20;
+static int pauseMS = 5;
 int[] arr;
 boolean sort = false;
 SortingAlgo sortingAlgorithm;
@@ -63,15 +62,21 @@ int redIndex = -1;
 int blueIndex = -1;
 int greenIndex = -1;
 boolean startScreen = true;
+boolean sorting = false;
 void draw(){
   background(0);
   if(startScreen){
-    text("BubbleSort\nInsertionSort\nSelectionSort\nMergeSort\nHeapSort\nQuickSort",width/2,height/2);
+    text("B:BubbleSort\nI:InsertionSort\nS:SelectionSort\nM:MergeSort\nH:HeapSort\nQ:QuickSort",width/2,height/2);
   } else {
-    if(!sort){
+    sort = isSorted(arr);
+    if(!sort && !sorting){
+      sorting = true;
       thread("sort");
     } else {
       redraw();
+    }
+    if(sort){
+      sorting = false;
     }
   
     for(int i = 0; i < arr.length-1 ; i++){
@@ -85,21 +90,16 @@ void draw(){
 }
 
 public void sort(){
-  sort = sortingAlgorithm.sort(arr);
-  return;
+  sortingAlgorithm.sort(arr);
 }
 
 public void step(){
-  try{
-    Thread.sleep(pauseMS);
-    redraw();
-  } catch (Exception x){
-    x.printStackTrace();
-  }  
+  step(pauseMS);
 }
 
 public void step(int ms){
   try{
+    redraw();
     Thread.sleep(ms);
     redraw();
   } catch (Exception x){
